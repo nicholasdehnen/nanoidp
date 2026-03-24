@@ -36,6 +36,12 @@
 pip install nanoidp
 ```
 
+### From GHCR (Docker Image)
+
+```bash
+docker pull ghcr.io/cdelmonte-zg/nanoidp:latest
+```
+
 ### From Source
 
 ```bash
@@ -111,6 +117,14 @@ docker-compose up -d
 ```
 
 The server will be available at `http://localhost:8000`
+
+You can also run the published GHCR image directly:
+
+```bash
+docker run --rm -p 8000:8000 \
+  -v $(pwd)/config:/app/config \
+  ghcr.io/cdelmonte-zg/nanoidp:latest
+```
 
 ## Web Interface
 
@@ -684,7 +698,7 @@ For detailed usage examples with Claude Code, see [docs/MCP_WORKFLOW.md](docs/MC
 
 ## Releasing
 
-NanoIDP uses GitHub Actions with PyPI Trusted Publishing for automated releases.
+NanoIDP uses GitHub Actions for automated releases to both PyPI and GHCR.
 
 ### Release Process
 
@@ -704,13 +718,16 @@ The workflow automatically:
 2. Builds the package
 3. Publishes to TestPyPI
 4. Publishes to PyPI (only for non-prerelease tags)
+5. Builds and publishes Docker images to GHCR
+
+Container tags are derived from the git tag (for example `v1.0.1`); the `latest` tag is only published for non-prerelease tags.
 
 ### Pre-release Testing
 
 For testing releases before publishing to PyPI:
 
 ```bash
-# Create a pre-release tag (only publishes to TestPyPI)
+# Create a pre-release tag (publishes to TestPyPI and GHCR)
 git tag v1.0.1-rc1
 git push origin v1.0.1-rc1
 
